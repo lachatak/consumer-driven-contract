@@ -1,0 +1,1 @@
+docker run -d -p 8888:80 binarymash/pact_broker_sqlite3
