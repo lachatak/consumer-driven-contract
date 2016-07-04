@@ -1,10 +1,11 @@
 package org.kaloz.cdc.consumer
 
+
+import com.gumtree.greeting.handler.DefaultApi
+import com.gumtree.greeting.invoker.ApiInvoker
 import com.itv.scalapact.ScalaPactForger.{GET, forgePact, interaction}
 import org.apache.http.HttpStatus
 import org.scalatest.{FunSpec, Matchers}
-
-import scalaj.http.Http
 
 class Consumer1PactSpec extends FunSpec with Matchers {
 
@@ -22,17 +23,13 @@ class Consumer1PactSpec extends FunSpec with Matchers {
             .description("a simple get for client1 greeting")
             .given("a condition is given")
             .uponReceiving(GET, endPoint, Some("client=Consumer1"))
-            .willRespondWith(HttpStatus.SC_OK, "Hello Consumer1!")
+            .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "text/plain"), "Hello Consumer1!")
         )
         .runConsumerTest { mockConfig =>
-
-          val response = Http(mockConfig.baseUrl + endPoint).param("client", "Consumer1").asString
-
-          response.code should equal(HttpStatus.SC_OK)
-          response.body should equal("Hello Consumer1!")
-
+          val apiInvoker = new ApiInvoker
+          val defaultApi = new DefaultApi(mockConfig.baseUrl, apiInvoker)
+          defaultApi.greeting("Consumer1") should equal(Some("Hello Consumer1!"))
         }
-
     }
   }
 }

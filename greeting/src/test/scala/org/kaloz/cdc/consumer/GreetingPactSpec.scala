@@ -29,6 +29,7 @@ class GreetingPactSpec extends FunSpec with Matchers {
           val response = Http(mockConfig.baseUrl + endPoint).asString
 
           response.code should equal(HttpStatus.SC_OK)
+          response.header("Content-Type") should equal(Some("text/plain"))
           response.body should equal("01-07-2016")
 
         }
@@ -53,6 +54,7 @@ class GreetingPactSpec extends FunSpec with Matchers {
           val response = Http(mockConfig.baseUrl + endPoint).asString
 
           response.code should equal(HttpStatus.SC_OK)
+          response.header("Content-Type") should equal(Some("text/plain"))
           response.body should equal("01-07-2017")
 
         }

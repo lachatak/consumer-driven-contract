@@ -21,13 +21,14 @@ class Consumer2PactSpec extends FunSpec with Matchers {
           interaction
             .description("a simple get for client2 greeting")
             .uponReceiving(GET, endPoint, Some("client=Consumer2"))
-            .willRespondWith(HttpStatus.SC_OK, "Hello Consumer2!")
+            .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "text/plain"), "Hello Consumer2!")
         )
         .runConsumerTest { mockConfig =>
 
           val response = Http(mockConfig.baseUrl + endPoint).param("client", "Consumer2").asString
 
           response.code should equal(HttpStatus.SC_OK)
+          response.header("Content-Type") should equal(Some("text/plain"))
           response.body should equal("Hello Consumer2!")
 
         }
