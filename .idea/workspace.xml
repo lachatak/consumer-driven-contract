@@ -1,7 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="06e41287-591a-4810-8c97-09e16b15d1c2" name="Default" comment="" />
+    <list default="true" id="06e41287-591a-4810-8c97-09e16b15d1c2" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/cache/test-compile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/consumer1-1.0.0-SNAPSHOT.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/pacts/consumer1_greeting_c2a60787492ffeafd9c3c3b0d6c48efe0e5c29fe.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/test-classes/logback-test.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/test-classes/org/kaloz/cdc/consumer/Consumer1PactSpec$$anonfun$1$$anonfun$apply$mcV$sp$1$$anonfun$apply$mcV$sp$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/test-classes/org/kaloz/cdc/consumer/Consumer1PactSpec$$anonfun$1$$anonfun$apply$mcV$sp$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/test-classes/org/kaloz/cdc/consumer/Consumer1PactSpec$$anonfun$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer1/target/test-classes/org/kaloz/cdc/consumer/Consumer1PactSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/cache/test-compile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/consumer2-1.0.0-SNAPSHOT.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/pacts/consumer2_greeting_dbc51987de63bf80e52c9331829717a21c790e13.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/test-classes/logback-test.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/test-classes/org/kaloz/cdc/consumer/Consumer2PactSpec$$anonfun$1$$anonfun$apply$mcV$sp$1$$anonfun$apply$mcV$sp$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/test-classes/org/kaloz/cdc/consumer/Consumer2PactSpec$$anonfun$1$$anonfun$apply$mcV$sp$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/test-classes/org/kaloz/cdc/consumer/Consumer2PactSpec$$anonfun$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/consumer2/target/test-classes/org/kaloz/cdc/consumer/Consumer2PactSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/cache/compile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/cache/test-compile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/classes/org/kaloz/cdc/provider/Main$$anonfun$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/classes/org/kaloz/cdc/provider/Main$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/classes/org/kaloz/cdc/provider/Main$Client$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/classes/org/kaloz/cdc/provider/Main$delayedInit$body.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/classes/org/kaloz/cdc/provider/Main.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/greeting-1.0.0-SNAPSHOT.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/greeting-jar-with-dependencies.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/pacts/greeting_time.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/logback-test.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/org/kaloz/cdc/consumer/GreetingPactSpec$$anonfun$1$$anonfun$apply$mcV$sp$1$$anonfun$apply$mcV$sp$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/org/kaloz/cdc/consumer/GreetingPactSpec$$anonfun$1$$anonfun$apply$mcV$sp$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/org/kaloz/cdc/consumer/GreetingPactSpec$$anonfun$1$$anonfun$apply$mcV$sp$2$$anonfun$apply$mcV$sp$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/org/kaloz/cdc/consumer/GreetingPactSpec$$anonfun$1$$anonfun$apply$mcV$sp$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/org/kaloz/cdc/consumer/GreetingPactSpec$$anonfun$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/org/kaloz/cdc/consumer/GreetingPactSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/pacts-dependents/consumer1-greeting.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/greeting/target/test-classes/pacts-dependents/consumer2-greeting.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/cache/compile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/cache/test-compile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/classes/org/kaloz/cdc/time/Main$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/classes/org/kaloz/cdc/time/Main$delayedInit$body.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/classes/org/kaloz/cdc/time/Main.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/classes/org/kaloz/cdc/time/ServerImpl$$anonfun$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/classes/org/kaloz/cdc/time/ServerImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/maven-archiver/pom.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/logback-test.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$$anonfun$org$kaloz$cdc$time$ProviderSpec$$verifyPact$1$$anonfun$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$$anonfun$org$kaloz$cdc$time$ProviderSpec$$verifyPact$1$$anonfun$apply$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$$anonfun$org$kaloz$cdc$time$ProviderSpec$$verifyPact$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$Provider$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$Provider$Pact$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$Provider$Pact.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$Provider.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$class.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$using$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec$using.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/ProviderSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/Starter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/TimeSpec$$anon$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/org/kaloz/cdc/time/TimeSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/test-classes/pacts-dependents/greeting-time.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/time/target/time-1.0.0-SNAPSHOT.jar" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="cdc-all.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/consumer1/target/" />
@@ -1165,7 +1239,7 @@
       <option name="presentableId" value="Default" />
       <updated>1467360809098</updated>
       <workItem from="1467360812134" duration="27778000" />
-      <workItem from="1467538294805" duration="25372000" />
+      <workItem from="1467538294805" duration="25444000" />
     </task>
     <servers />
   </component>
@@ -1202,7 +1276,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53150000" />
+    <option name="totallyTimeSpent" value="53222000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
