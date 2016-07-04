@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/cdc-all.iml" filepath="$PROJECT_DIR$/cdc-all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer1/consumer1.iml" filepath="$PROJECT_DIR$/consumer1/consumer1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer2/consumer2.iml" filepath="$PROJECT_DIR$/consumer2/consumer2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/greeting/greeting.iml" filepath="$PROJECT_DIR$/greeting/greeting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/time/time.iml" filepath="$PROJECT_DIR$/time/time.iml" />
+    </modules>
+  </component>
+</project>

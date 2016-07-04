@@ -1,0 +1,22 @@
+{
+  "provider" : {
+    "name" : "greeting"
+  },
+  "consumer" : {
+    "name" : "consumer2"
+  },
+  "interactions" : [
+    {
+      "description" : "a simple get for client2 greeting",
+      "request" : {
+        "method" : "GET",
+        "path" : "/greeting",
+        "query" : "client=Consumer2"
+      },
+      "response" : {
+        "status" : 200,
+        "body" : "Hello Consumer2!"
+      }
+    }
+  ]
+}

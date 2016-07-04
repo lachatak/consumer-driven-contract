@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.argonaut:argonaut_2.11:javadoc:6.2-M1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/argonaut/argonaut_2.11/6.2-M1/argonaut_2.11-6.2-M1-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/io/argonaut/argonaut_2.11/6.2-M1/argonaut_2.11-6.2-M1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/argonaut/argonaut_2.11/6.2-M1/argonaut_2.11-6.2-M1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
