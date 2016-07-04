@@ -43,7 +43,7 @@
         <sbt-compiler.plugin.version>1.0.0-beta8</sbt-compiler.plugin.version>
         <scalatest-maven-plugin.version>1.0</scalatest-maven-plugin.version>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
-        <pactbroker-maven-plugin.version>0.0.7</pactbroker-maven-plugin.version>
+        <pactbroker-maven-plugin.version>0.0.8</pactbroker-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -225,14 +225,14 @@
                             <goals>
                                 <goal>upload-pacts</goal>
                             </goals>
-                            <phase>test</phase>
+                            <phase>verify</phase>
                         </execution>
                         <execution>
                             <id>download-pacts</id>
-                            <phase>generate-test-resources</phase>
                             <goals>
                                 <goal>download-pacts</goal>
                             </goals>
+                            <phase>generate-test-resources</phase>
                         </execution>
                     </executions>
                 </plugin>
