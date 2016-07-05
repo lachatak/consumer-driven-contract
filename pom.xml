@@ -11,6 +11,7 @@
 
     <!-- Modules -->
     <modules>
+        <module>contracts</module>
         <module>consumer1</module>
         <module>consumer2</module>
         <module>greeting</module>
