@@ -21,6 +21,7 @@
         <swagger-scala-module.version>1.0.2</swagger-scala-module.version>
 
         <swagger-codegen-maven-plugin.version>2.1.6</swagger-codegen-maven-plugin.version>
+        <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
     </properties>
 
     <dependencies>
@@ -186,25 +187,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
+                <version>${maven-dependency-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>copy</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.kaloz.cdc</groupId>
-                                    <artifactId>greeting-contract</artifactId>
-                                    <type>contract</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/contracts</outputDirectory>
-                                    <destFileName>greeting.json</destFileName>
-                                </artifactItem>
-                            </artifactItems>
+                            <includeTypes>contract</includeTypes>
+                            <outputDirectory>${project.build.directory}/contracts</outputDirectory>
+                            <stripVersion>true</stripVersion>
+                            <stripClassifier>true</stripClassifier>
                         </configuration>
                     </execution>
                 </executions>
@@ -219,7 +214,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.build.directory}/contracts/greeting.json</inputSpec>
+                            <inputSpec>${project.build.directory}/contracts/greeting-contract.contract</inputSpec>
                             <language>scala</language>
                             <output>${project.build.directory}/generated-sources</output>
                             <apiPackage>com.gumtree.greeting.handler</apiPackage>
