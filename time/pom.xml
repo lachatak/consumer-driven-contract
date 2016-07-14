@@ -118,11 +118,17 @@
             <plugin>
                 <groupId>com.github.warmuuh</groupId>
                 <artifactId>pactbroker-maven-plugin</artifactId>
-                <configuration>
-                    <brokerUrl>http://192.168.99.100:8888</brokerUrl>
-                    <providerPacts>${project.build.testOutputDirectory}/pacts-dependents</providerPacts>
-                    <provider>time</provider>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>download-pacts</id>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <brokerUrl>http://192.168.99.100:8888</brokerUrl>
+                            <pacts>${project.build.testOutputDirectory}/pacts-dependents</pacts>
+                            <provider>time</provider>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

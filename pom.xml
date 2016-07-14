@@ -223,17 +223,18 @@
                     <version>${pactbroker-maven-plugin.version}</version>
                     <executions>
                         <execution>
+                            <id>upload-pacts</id>
+                            <phase>none</phase>
                             <goals>
                                 <goal>upload-pacts</goal>
                             </goals>
-                            <phase>verify</phase>
                         </execution>
                         <execution>
                             <id>download-pacts</id>
+                            <phase>none</phase>
                             <goals>
                                 <goal>download-pacts</goal>
                             </goals>
-                            <phase>generate-test-resources</phase>
                         </execution>
                     </executions>
                 </plugin>
