@@ -85,6 +85,7 @@
                         <configuration>
                             <brokerUrl>http://192.168.99.100:8888</brokerUrl>
                             <pacts>${project.build.directory}/pacts</pacts>
+                            <mergePacts>true</mergePacts>
                         </configuration>
                     </execution>
                 </executions>
