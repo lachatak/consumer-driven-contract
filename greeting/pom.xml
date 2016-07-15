@@ -90,12 +90,26 @@
             <plugin>
                 <groupId>com.github.warmuuh</groupId>
                 <artifactId>pactbroker-maven-plugin</artifactId>
-                <configuration>
-                    <brokerUrl>http://192.168.99.100:8888</brokerUrl>
-                    <consumerPacts>${project.build.directory}/pacts</consumerPacts>
-                    <providerPacts>${project.build.testOutputDirectory}/pacts-dependents</providerPacts>
-                    <provider>greeting</provider>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>download-pacts</id>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <brokerUrl>http://192.168.99.100:8888</brokerUrl>
+                            <pacts>${project.build.testOutputDirectory}/pacts-dependents</pacts>
+                            <provider>greeting</provider>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>upload-pacts</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <brokerUrl>http://192.168.99.100:8888</brokerUrl>
+                            <pacts>${project.build.directory}/pacts</pacts>
+                            <mergePacts>true</mergePacts>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
