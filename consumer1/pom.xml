@@ -27,8 +27,9 @@
     <dependencies>
         <dependency>
             <groupId>org.kaloz.cdc</groupId>
-            <artifactId>greeting-contract</artifactId>
+            <artifactId>contracts</artifactId>
             <version>1.0.0-SNAPSHOT</version>
+            <classifier>greeting</classifier>
             <type>contract</type>
         </dependency>
 
@@ -199,7 +200,17 @@
                             <includeTypes>contract</includeTypes>
                             <outputDirectory>${project.build.directory}/contracts</outputDirectory>
                             <stripVersion>true</stripVersion>
-                            <stripClassifier>true</stripClassifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>list</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>list</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>contract</includeTypes>
+                            <outputFile>${project.build.directory}/contracts/versions.txt</outputFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -214,7 +225,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.build.directory}/contracts/greeting-contract.contract</inputSpec>
+                            <inputSpec>${project.build.directory}/contracts/contracts-greeting.contract</inputSpec>
                             <language>scala</language>
                             <output>${project.build.directory}/generated-sources</output>
                             <apiPackage>com.gumtree.greeting.handler</apiPackage>

@@ -9,7 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>greeting-contract</artifactId>
+    <artifactId>contracts</artifactId>
 
     <build>
         <plugins>
@@ -39,6 +39,7 @@
                             <artifacts>
                                 <artifact>
                                     <file>src/main/resources/greeting.json</file>
+                                    <classifier>greeting</classifier>
                                     <type>contract</type>
                                 </artifact>
                             </artifacts>
