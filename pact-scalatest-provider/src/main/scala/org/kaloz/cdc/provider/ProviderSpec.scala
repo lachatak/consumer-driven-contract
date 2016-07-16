@@ -49,10 +49,10 @@ trait ProviderSpec extends FlatSpec with Matchers {
   private def verifyPact(provider: String, consumer: Consumer, starter: ServerStarter, restartServer: Boolean = false): Unit = {
 
     val verifier = new ProviderVerifier
-    val consumerInfos = ProviderUtils.loadPactFiles(new model.Provider(provider), new File(getClass.getClassLoader.getResource("pacts-dependents").toURI)).asInstanceOf[java.util.List[ConsumerInfo]]
-    consumerInfos.filter(consumer.filter).map { consumerInfo =>
-      val pact = verifier.loadPactFileForConsumer(consumerInfo).asInstanceOf[Pact]
-      pact.getInteractions.map(_.asInstanceOf[RequestResponseInteraction]).foreach { interaction =>
+    ProviderUtils.loadPactFiles(new model.Provider(provider), new File(getClass.getClassLoader.getResource("pacts-dependents").toURI)).asInstanceOf[java.util.List[ConsumerInfo]]
+      .filter(consumer.filter)
+      .flatMap(verifier.loadPactFileForConsumer(_).asInstanceOf[Pact].getInteractions.map(_.asInstanceOf[RequestResponseInteraction]))
+      .foreach { interaction =>
         val description = new StringBuilder(interaction.getDescription)
         if (interaction.getProviderState != null) description.append(s" given ${interaction.getProviderState}")
         provider should description.toString() in {
@@ -67,7 +67,6 @@ trait ProviderSpec extends FlatSpec with Matchers {
           ResponseMatching.matchRules(interaction.getResponse, actualResponse) shouldBe (FullResponseMatch)
         }
       }
-    }
   }
 }
 
