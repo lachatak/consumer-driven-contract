@@ -2,7 +2,6 @@ package org.kaloz.cdc.time
 
 class TimeSpec extends ProviderSpec {
 
-
   val starter: Starter = new Starter {
 
     var server: ServerImpl = _
@@ -20,6 +19,6 @@ class TimeSpec extends ProviderSpec {
 
   }
 
-  "time" complying "greeting" pacts using(starter)
+  "time" complying all pacts using(starter)
 
 }
