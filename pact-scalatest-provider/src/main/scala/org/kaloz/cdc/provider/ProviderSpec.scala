@@ -16,12 +16,18 @@ import scala.concurrent.{Await, ExecutionContext}
 trait ProviderSpec extends FlatSpec with Matchers {
 
   case class Provider(provider: String) {
-    def complying(consumer: Consumer) = Pact(provider, consumer)
+    def complying(consumer: Consumer): Pact = Pact(provider, consumer)
 
     case class Pact(provider: String, consumer: Consumer) {
-      def pacts(using: using): Unit = verifyPact(provider, consumer, using.starter)
+      def pacts(using: testing): RestartHandler = RestartHandler(provider, consumer, using.starter)
     }
 
+  }
+
+  case class RestartHandler(provider: String, consumer: Consumer, starter: ServerStarter) {
+    def withoutRestart() = verifyPact(provider, consumer, starter)
+
+    def withRestart() = verifyPact(provider, consumer, starter, true)
   }
 
   trait Consumer {
@@ -32,7 +38,7 @@ trait ProviderSpec extends FlatSpec with Matchers {
     override val filter = (consumerInfo: ConsumerInfo) => true
   }
 
-  case class using(starter: Starter)
+  case class testing(starter: ServerStarter)
 
   implicit def strToProvider(provider: String) = Provider(provider)
 
@@ -40,7 +46,7 @@ trait ProviderSpec extends FlatSpec with Matchers {
     override val filter = (consumerInfo: ConsumerInfo) => consumerInfo.getName == consumer
   }
 
-  private def verifyPact(provider: String, consumer: Consumer, starter: Starter): Unit = {
+  private def verifyPact(provider: String, consumer: Consumer, starter: ServerStarter, restartServer: Boolean = false): Unit = {
 
     val verifier = new ProviderVerifier
     val consumerInfos = ProviderUtils.loadPactFiles(new model.Provider(provider), new File(getClass.getClassLoader.getResource("pacts-dependents").toURI)).asInstanceOf[java.util.List[ConsumerInfo]]
@@ -49,31 +55,40 @@ trait ProviderSpec extends FlatSpec with Matchers {
       pact.getInteractions.map(_.asInstanceOf[RequestResponseInteraction]).foreach { interaction =>
         val description = new StringBuilder(interaction.getDescription)
         if (interaction.getProviderState != null) description.append(s" given ${interaction.getProviderState}")
-        val test: String => Unit = { url =>
+        provider should description.toString() in {
+          if (!starter.isRunning()) starter.startServer()
+          starter.initState(interaction.getProviderState)
           implicit val executionContext = ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
           val request = interaction.getRequest.copy
-          request.setPath(s"$url${interaction.getRequest.getPath}")
+          request.setPath(s"${starter.url}${interaction.getRequest.getPath}")
           val actualResponseFuture = HttpClient.run(request)
           val actualResponse = Await.result(actualResponseFuture, 5 seconds)
-          starter.tearDown()
+          if (restartServer) starter.stopServer()
           ResponseMatching.matchRules(interaction.getResponse, actualResponse) shouldBe (FullResponseMatch)
-        }
-        provider should description.toString() in {
-          test(starter.start(interaction.getProviderState))
         }
       }
     }
   }
 }
 
-trait Starter {
+trait ServerStarter {
 
-  def start(state: String): String
+  def url: String
 
-  def tearDown(): Unit
+  def startServer(): Unit
+
+  def initState(state: String)
+
+  def isRunning(): Boolean
+
+  def stopServer(): Unit
 }
 
-abstract class CompactPactProviderSpec(provider: String) extends ProviderSpec with Starter {
-  provider complying all pacts using(this)
+abstract class CompactPactProviderRestartSpec(provider: String) extends ProviderSpec with ServerStarter {
+  provider complying all pacts testing(this) withRestart
+}
+
+abstract class CompactPactProviderStateFulSpec(provider: String) extends ProviderSpec with ServerStarter {
+  provider complying all pacts testing(this) withoutRestart
 }
 
