@@ -1,24 +1,20 @@
 package org.kaloz.cdc.time
 
-class TimeSpec extends ProviderSpec {
+import org.kaloz.cdc.provider.CompactPactProviderSpec
 
-  val starter: Starter = new Starter {
+class TimeSpec extends CompactPactProviderSpec("time") {
 
-    var server: ServerImpl = _
+  var server: ServerImpl = _
 
-    override def start(state: String): String = {
-      server = new ServerImpl()
-      server.startServer()
-      if (state.contains("01-07-2017")) server.date = "01-07-2017"
-      server.url()
-    }
-
-    override def tearDown(): Unit = {
-      server.stopServer()
-    }
-
+  override def start(state: String): String = {
+    server = new ServerImpl()
+    server.startServer()
+    if (state.contains("01-07-2017")) server.date = "01-07-2017"
+    server.url()
   }
 
-  "time" complying all pacts using(starter)
+  override def tearDown(): Unit = {
+    server.stopServer()
+  }
 
 }

@@ -1,4 +1,4 @@
-package org.kaloz.cdc.time
+package org.kaloz.cdc.provider
 
 import java.io.File
 import java.util.concurrent.Executors
@@ -21,6 +21,7 @@ trait ProviderSpec extends FlatSpec with Matchers {
     case class Pact(provider: String, consumer: Consumer) {
       def pacts(using: using): Unit = verifyPact(provider, consumer, using.starter)
     }
+
   }
 
   trait Consumer {
@@ -70,5 +71,9 @@ trait Starter {
   def start(state: String): String
 
   def tearDown(): Unit
+}
+
+abstract class CompactPactProviderSpec(provider: String) extends ProviderSpec with Starter {
+  provider complying all pacts using(this)
 }
 
