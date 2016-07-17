@@ -51,9 +51,9 @@ trait ProviderSpec extends FlatSpec with Matchers {
     val verifier = new ProviderVerifier
     ProviderUtils.loadPactFiles(new model.Provider(provider), new File(getClass.getClassLoader.getResource("pacts-dependents").toURI)).asInstanceOf[java.util.List[ConsumerInfo]]
       .filter(consumer.filter)
-      .flatMap(verifier.loadPactFileForConsumer(_).asInstanceOf[Pact].getInteractions.map(_.asInstanceOf[RequestResponseInteraction]))
-      .foreach { interaction =>
-        val description = new StringBuilder(interaction.getDescription)
+      .flatMap(c => verifier.loadPactFileForConsumer(c).asInstanceOf[Pact].getInteractions.map(i => (c.getName, i.asInstanceOf[RequestResponseInteraction])))
+      .foreach { case (consumerName, interaction) =>
+        val description = new StringBuilder(s"${interaction.getDescription} for '$consumerName'")
         if (interaction.getProviderState != null) description.append(s" given ${interaction.getProviderState}")
         provider should description.toString() in {
           if (!starter.isRunning()) starter.startServer()
