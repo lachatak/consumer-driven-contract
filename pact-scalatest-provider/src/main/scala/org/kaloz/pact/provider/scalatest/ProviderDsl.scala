@@ -41,3 +41,5 @@ trait ProviderDsl {
   case class testing(starter: ServerStarter)
 
 }
+
+object ProviderDsl extends ProviderDsl

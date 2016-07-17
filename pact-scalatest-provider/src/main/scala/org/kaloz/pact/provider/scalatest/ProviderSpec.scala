@@ -8,13 +8,15 @@ import au.com.dius.pact.model.{FullResponseMatch, RequestResponseInteraction, Re
 import au.com.dius.pact.provider.sbtsupport.HttpClient
 import au.com.dius.pact.provider.{ConsumerInfo, ProviderUtils, ProviderVerifier}
 import org.kaloz.pact.provider.scalatest.Tags.PactTest
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
 import scala.collection.JavaConversions._
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 
-trait ProviderSpec extends FlatSpec with Matchers {
+trait ProviderSpec extends FlatSpec with BeforeAndAfterAll with ProviderDsl with Matchers {
+
+  var handler: ServerStarter = _
 
   /**
     * Verifies pacts with a given configuration.
@@ -27,8 +29,9 @@ trait ProviderSpec extends FlatSpec with Matchers {
     import verificationConfig.pact._
     import verificationConfig.serverConfig._
 
+    handler = serverStarter
     val verifier = new ProviderVerifier
-    ProviderUtils.loadPactFiles(new model.Provider(provider), new File(getClass.getClassLoader.getResource("pacts-dependents").toURI)).asInstanceOf[java.util.List[ConsumerInfo]]
+    ProviderUtils.loadPactFiles(new model.Provider(provider), new File(this.getClass.getClassLoader.getResource("pacts-dependents").toURI)).asInstanceOf[java.util.List[ConsumerInfo]]
       .filter(consumer.filter)
       .flatMap(c => verifier.loadPactFileForConsumer(c).asInstanceOf[PactForConsumer].getInteractions.map(i => (c.getName, i.asInstanceOf[RequestResponseInteraction])))
       .foreach { case (consumerName, interaction) =>
@@ -47,13 +50,18 @@ trait ProviderSpec extends FlatSpec with Matchers {
         }
       }
   }
+
+  override def afterAll() = {
+    super.afterAll()
+    if (handler.isRunning()) handler.stopServer()
+  }
 }
 
-abstract class PactProviderRestartDslSpec(provider: String) extends ProviderSpec with ProviderDsl with ServerStarter {
-  verify(provider complying all pacts testing(this) withRestart)
+abstract class PactProviderRestartDslSpec(provider: String, consumer: Consumer = ProviderDsl.all) extends ProviderSpec with ServerStarter {
+  verify(provider complying consumer pacts testing(this) withRestart)
 }
 
-abstract class PactProviderStatefulDslSpec(provider: String) extends ProviderSpec with ProviderDsl with ServerStarter {
-  verify(provider complying all pacts testing(this) withoutRestart)
+abstract class PactProviderStatefulDslSpec(provider: String, consumer: Consumer = ProviderDsl.all) extends ProviderSpec with ServerStarter {
+  verify(provider complying consumer pacts testing(this) withoutRestart)
 }
 

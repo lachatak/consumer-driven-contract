@@ -19,7 +19,7 @@ class GreetingPactSpec extends FunSpec with Matchers {
         .and("time")
         .addInteraction(
           interaction
-            .description("provide the time from greeting")
+            .description("provide the time")
             .given("time is set to 01-07-2016")
             .uponReceiving(GET, endPoint)
             .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "text/plain"), "01-07-2016")
@@ -44,7 +44,7 @@ class GreetingPactSpec extends FunSpec with Matchers {
         .and("time")
         .addInteraction(
           interaction
-            .description("provide the time from greeting")
+            .description("provide the time")
             .given("time is set to 01-07-2017")
             .uponReceiving(GET, endPoint)
             .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "text/plain"), "01-07-2017")
