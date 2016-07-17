@@ -53,7 +53,7 @@ abstract class PactProviderRestartDslSpec(provider: String) extends ProviderSpec
   verify(provider complying all pacts testing(this) withRestart)
 }
 
-abstract class PactProviderStateFulDslSpec(provider: String) extends ProviderSpec with ProviderDsl with ServerStarter {
+abstract class PactProviderStatefulDslSpec(provider: String) extends ProviderSpec with ProviderDsl with ServerStarter {
   verify(provider complying all pacts testing(this) withoutRestart)
 }
 

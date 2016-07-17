@@ -1,8 +1,8 @@
 package org.kaloz.cdc.time
 
-import org.kaloz.pact.provider.scalatest.PactProviderStateFulDslSpec
+import org.kaloz.pact.provider.scalatest.PactProviderStatefulDslSpec
 
-class TimeSpec extends PactProviderStateFulDslSpec("time") {
+class TimeSpec extends PactProviderStatefulDslSpec("time") {
 
   var server: ServerImpl = _
 
