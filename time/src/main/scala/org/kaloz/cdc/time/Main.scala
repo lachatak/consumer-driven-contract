@@ -1,5 +1,7 @@
 package org.kaloz.cdc.time
 
+import java.net.URL
+
 import org.http4s.MediaType.`text/plain`
 import org.http4s._
 import org.http4s.dsl._
@@ -36,7 +38,7 @@ class ServerImpl {
   def stopServer() = server.shutdownNow()
 
 
-  def url() = s"http://${server.address.getHostName}:${server.address.getPort}"
+  def url(): URL = new URL(s"http://${server.address.getHostName}:${server.address.getPort}")
 
 
 }

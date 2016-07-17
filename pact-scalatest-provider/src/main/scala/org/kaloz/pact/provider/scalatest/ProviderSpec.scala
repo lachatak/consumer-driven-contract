@@ -1,6 +1,7 @@
 package org.kaloz.pact.provider.scalatest
 
 import java.io.File
+import java.net.URL
 import java.util.concurrent.Executors
 
 import au.com.dius.pact.model
@@ -16,7 +17,7 @@ import scala.concurrent.{Await, ExecutionContext}
 
 trait ProviderSpec extends FlatSpec with BeforeAndAfterAll with ProviderDsl with Matchers {
 
-  var handler: ServerStarter = _
+  private var handler: Option[ServerStarterWithUrl] = None
 
   /**
     * Verifies pacts with a given configuration.
@@ -29,7 +30,6 @@ trait ProviderSpec extends FlatSpec with BeforeAndAfterAll with ProviderDsl with
     import verificationConfig.pact._
     import verificationConfig.serverConfig._
 
-    handler = serverStarter
     val verifier = new ProviderVerifier
     ProviderUtils.loadPactFiles(new model.Provider(provider), new File(this.getClass.getClassLoader.getResource("pacts-dependents").toURI)).asInstanceOf[java.util.List[ConsumerInfo]]
       .filter(consumer.filter)
@@ -38,14 +38,13 @@ trait ProviderSpec extends FlatSpec with BeforeAndAfterAll with ProviderDsl with
         val description = new StringBuilder(s"${interaction.getDescription} for '$consumerName'")
         if (interaction.getProviderState != null) description.append(s" given ${interaction.getProviderState}")
         provider should description.toString() taggedAs PactTest in {
-          if (!serverStarter.isRunning()) serverStarter.startServer()
-          serverStarter.initState(interaction.getProviderState)
+          startServerWithState(serverStarter, interaction.getProviderState)
           implicit val executionContext = ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
           val request = interaction.getRequest.copy
-          request.setPath(s"${serverStarter.url}${interaction.getRequest.getPath}")
+          handler.foreach(h => request.setPath(s"${h.url.toString}${interaction.getRequest.getPath}"))
           val actualResponseFuture = HttpClient.run(request)
           val actualResponse = Await.result(actualResponseFuture, 5 seconds)
-          if (restartServer) serverStarter.stopServer()
+          if (restartServer) stopServer()
           ResponseMatching.matchRules(interaction.getResponse, actualResponse) shouldBe (FullResponseMatch)
         }
       }
@@ -53,8 +52,33 @@ trait ProviderSpec extends FlatSpec with BeforeAndAfterAll with ProviderDsl with
 
   override def afterAll() = {
     super.afterAll()
-    if (handler.isRunning()) handler.stopServer()
+    stopServer()
   }
+
+  private def startServerWithState(serverStarter: ServerStarter, state: String) {
+    handler = handler.orElse {
+      Some(ServerStarterWithUrl(serverStarter))
+    }.map { h =>
+      h.initState(state)
+      h
+    }
+  }
+
+  private def stopServer() {
+    handler.foreach { h =>
+      h.stopServer()
+      handler = None
+    }
+  }
+
+  private case class ServerStarterWithUrl(serverStarter: ServerStarter) {
+    val url: URL = serverStarter.startServer()
+
+    def initState(state: String) = serverStarter.initState(state)
+
+    def stopServer() = serverStarter.stopServer()
+  }
+
 }
 
 abstract class PactProviderRestartDslSpec(provider: String, consumer: Consumer = ProviderDsl.all) extends ProviderSpec with ServerStarter {

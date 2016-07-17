@@ -1,14 +1,12 @@
 package org.kaloz.pact.provider.scalatest
 
+import java.net.URL
+
 trait ServerStarter {
 
-  def url: String
-
-  def startServer(): Unit
+  def startServer(): URL
 
   def initState(state: String)
-
-  def isRunning(): Boolean
 
   def stopServer(): Unit
 }
