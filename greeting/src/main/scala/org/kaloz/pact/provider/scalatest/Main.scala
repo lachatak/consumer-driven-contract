@@ -1,4 +1,4 @@
-package org.kaloz.cdc.provider
+package org.kaloz.pact.provider.scalatest
 
 import org.http4s.MediaType._
 import org.http4s._

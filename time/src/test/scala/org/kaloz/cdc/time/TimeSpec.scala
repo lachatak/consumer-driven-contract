@@ -1,6 +1,6 @@
 package org.kaloz.cdc.time
 
-import org.kaloz.cdc.provider.CompactPactProviderStateFulSpec
+import org.kaloz.pact.provider.scalatest.CompactPactProviderStateFulSpec
 
 class TimeSpec extends CompactPactProviderStateFulSpec("time") {
 
