@@ -12,12 +12,12 @@
     <artifactId>consumer1</artifactId>
 
     <properties>
-        <joda-version>1.2</joda-version>
-        <joda-time-version>2.2</joda-time-version>
-        <jersey-version>1.19</jersey-version>
-        <swagger-core-version>1.5.8</swagger-core-version>
-        <jersey-async-version>1.0.5</jersey-async-version>
         <jackson-version>2.4.2</jackson-version>
+        <jersey-async-version>1.0.5</jersey-async-version>
+        <jersey-version>1.19</jersey-version>
+        <joda-time-version>2.2</joda-time-version>
+        <joda-version>1.2</joda-version>
+        <swagger-core-version>1.5.8</swagger-core-version>
         <swagger-scala-module.version>1.0.2</swagger-scala-module.version>
 
         <swagger-codegen-maven-plugin.version>2.1.6</swagger-codegen-maven-plugin.version>

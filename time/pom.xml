@@ -61,9 +61,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.kaloz.cdc</groupId>
-            <artifactId>pact-scalatest-provider</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-provider-scalatest_2.11</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
