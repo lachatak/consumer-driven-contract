@@ -53,6 +53,7 @@
         <dependency>
             <groupId>com.itv</groupId>
             <artifactId>scalapact-scalatest_2.11</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
@@ -70,6 +71,7 @@
         <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
 
+        <!-- Upload generated pacts -->
         <plugins>
             <plugin>
                 <groupId>org.scalatest</groupId>

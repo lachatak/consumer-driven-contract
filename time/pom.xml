@@ -13,10 +13,6 @@
 
     <properties>
         <http4s-dsl.version>0.13.2a</http4s-dsl.version>
-
-        <maven-assembly-plugin.version>2.4.1</maven-assembly-plugin.version>
-        <process-exec-maven-plugin.version>0.7</process-exec-maven-plugin.version>
-        <pact-jvm-provider-maven.version>3.1.1</pact-jvm-provider-maven.version>
     </properties>
 
     <dependencies>
@@ -91,6 +87,7 @@
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
+            <!-- Download pacts for verification -->
             <plugin>
                 <groupId>com.github.warmuuh</groupId>
                 <artifactId>pactbroker-maven-plugin</artifactId>
