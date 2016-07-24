@@ -11,11 +11,12 @@
 
     <!-- Modules -->
     <modules>
-        <module>contracts</module>
-        <module>consumer1</module>
-        <module>consumer2</module>
-        <module>greeting</module>
-        <module>time</module>
+        <module>advert-api-contracts</module>
+        <module>security-api-contracts</module>
+        <module>mobile-client</module>
+        <module>web-client</module>
+        <module>advert-service</module>
+        <module>security-service</module>
     </modules>
 
     <!-- Properties -->

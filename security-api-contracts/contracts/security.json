@@ -1,0 +1,189 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "${project.version}",
+    "title": "Security API",
+    "description": "Security management system",
+    "contact": {
+      "name": "Kaloz",
+      "email": "krisztian.lachata@gmail.com"
+    }
+  },
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "paths": {
+    "/security/advert": {
+      "post": {
+        "tags": ["Advert"],
+        "description": "Verifies advert details",
+        "operationId": "verifyAdvert",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "header",
+            "description": "ClientId for tracking purpose",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Advert to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PostVerifyAdvertRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Advert data approved"
+          },
+          "403": {
+            "description": "Forbidden data",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/security/users": {
+      "get": {
+        "description": "Get list blocked users",
+        "tags": ["Users"],
+        "operationId": "blockedUsers",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "header",
+            "description": "ClientId for tracking purpose",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of blocked users",
+            "schema": {
+              "$ref": "#/definitions/BlockedUsersResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/security/users/{user_id}": {
+      "post": {
+        "description": "Adds user to the black list",
+        "tags": ["Users"],
+        "operationId": "blockUser",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "header",
+            "description": "ClientId for tracking purpose",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User to block",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is blocked"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Remove user from the black list",
+        "tags": ["Users"],
+        "operationId": "unblockUser",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "header",
+            "description": "ClientId for tracking purpose",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User to unblock",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is unblocked"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PostVerifyAdvertRequest": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "ad_description": {
+          "type": "string"
+        }
+      }
+    },
+    "BlockedUsersResponse": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error_code": {
+          "type": "string",
+          "enum": [
+            "user_blocked",
+            "rejected_ad_description"
+          ]
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "${project.version}",
+    "title": "Advert API",
+    "description": "Advert management system",
+    "contact": {
+      "name": "Kaloz",
+      "email": "krisztian.lachata@gmail.com"
+    }
+  },
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "paths": {
+    "/adverts": {
+      "post": {
+        "description": "Post valid ad for a not blacklisted user",
+        "tags": ["Advert"],
+        "operationId": "postAdvert",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "header",
+            "description": "ClientId for tracking purpose",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Advert to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PostAdvertRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful ad creation",
+            "schema": {
+              "$ref": "#/definitions/PostAdvertResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "Gives back all the adverts",
+        "tags": ["Advert"],
+        "operationId": "adverts",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "header",
+            "description": "ClientId for tracking purpose",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/AdvertListResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/adverts/{advert_id}": {
+      "get": {
+        "description": "Gives the details of the requested ad",
+        "tags": ["Advert"],
+        "operationId": "findAdvertById",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "header",
+            "description": "ClientId for tracking purpose",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "advert_id",
+            "in": "path",
+            "description": "Advert to fetch",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/AdvertDetailsResponse"
+            }
+          },
+          "404": {
+            "description": "Advert not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PostAdvertRequest": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "ad": {
+          "type": "object",
+          "properties": {
+            "category_id": {
+              "type": "integer"
+            },
+            "description": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "PostAdvertResponse": {
+      "type": "object",
+      "properties": {
+        "advert_id": {
+          "type": "string"
+        },
+        "accepted_ts": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "AdvertListResponse": {
+      "type": "object",
+      "properties": {
+        "userAdvertDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserAdvertDetails"
+          }
+        }
+      }
+    },
+    "UserAdvertDetails": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "ads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AdvertDetails"
+          }
+        }
+      }
+    },
+    "AdvertDetails": {
+      "type": "object",
+      "properties": {
+        "advert_id": {
+          "type": "string"
+        },
+        "accepted_ts": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "created",
+            "approved",
+            "active",
+            "closed"
+          ]
+        },
+        "category_id": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        }
+      }
+    },
+    "AdvertDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "advert_id": {
+          "type": "string"
+        },
+        "accepted_ts": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "created",
+            "approved",
+            "active",
+            "closed"
+          ]
+        },
+        "category_id": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error_code": {
+          "type": "string",
+          "enum": [
+            "user_blocked",
+            "rejected_ad_content"
+          ]
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
