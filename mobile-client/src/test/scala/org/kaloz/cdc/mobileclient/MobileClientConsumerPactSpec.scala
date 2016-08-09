@@ -1,4 +1,4 @@
-package org.kaloz.cdc.advert
+package org.kaloz.cdc.mobileclient
 
 import com.itv.scalapact.ScalaPactForger.{POST, forgePact, interaction}
 import org.apache.http.HttpStatus

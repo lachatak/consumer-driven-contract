@@ -1,39 +1,114 @@
 package org.kaloz.cdc.web
 
-import com.itv.scalapact.ScalaPactForger.{GET, forgePact, interaction}
+import com.itv.scalapact.ScalaPactForger.{POST, forgePact, interaction}
 import org.apache.http.HttpStatus
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.kaloz.cdc.advert.invoker.ScalaJsonUtil._
+import org.kaloz.cdc.advert.model.{ErrorResponse, PostAdvertRequest, PostAdvertRequestAd, PostAdvertResponse}
+import org.kaloz.cdc.mobileclient.api.ApiWrapper
 import org.scalatest.{FunSpec, Matchers}
 
-import scalaj.http.Http
+import scalaz.{-\/, \/-}
 
 class WebClientConsumerPactSpec extends FunSpec with Matchers {
 
-  //TODO update to use the real contract
-  describe("Web Client Consumer Test") {
+  val dateTime = DateTime.parse("17-07-16 14.53.12", DateTimeFormat.forPattern("dd-MM-yy HH.mm.ss"))
 
-    it("Should be able to create a contract for a greeting service") {
+  describe("Web Client Consumer") {
 
-      val endPoint = "/greeting"
+    it("should be able to post a new valid advert") {
+
+      val response: PostAdvertResponse = PostAdvertResponse("1", dateTime.toDate)
 
       forgePact
-        .between("web-client")
+        .between("mobile-client")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("a simple get for client2 greeting")
-            .uponReceiving(GET, endPoint, Some("client=Consumer2"))
-            .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "text/plain"), "Hello Consumer2!")
+            .description("Mobile client posts a new advert")
+            .given("the advert is valid")
+            .uponReceiving(POST,
+              "/api/adverts",
+              None,
+              Map("client_id" -> "web_client"),
+              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc")))),
+              None)
+            .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(response))
         )
         .runConsumerTest { mockConfig =>
-
-          val response = Http(mockConfig.baseUrl + endPoint).param("client", "Consumer2").asString
-
-          response.code should equal(HttpStatus.SC_OK)
-          response.header("Content-Type") should equal(Some("text/plain"))
-          response.body should equal("Hello Consumer2!")
-
+          val advertApi = new ApiWrapper(mockConfig.baseUrl)
+          advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(\/-(response))
         }
+    }
 
+    it("should be able to handle a new post ad with a blocked user") {
+
+      forgePact
+        .between("mobile-client")
+        .and("advert-service")
+        .addInteraction(
+          interaction
+            .description("Mobile client posts a new advert")
+            .given("the user_id is blocked")
+            .uponReceiving(POST,
+              "/api/adverts",
+              None,
+              Map("client_id" -> "web_client"),
+              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc")))),
+              None)
+            .willRespondWith(HttpStatus.SC_BAD_REQUEST, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(ErrorResponse("user_blocked", "userId is blocked!")))
+        )
+        .runConsumerTest { mockConfig =>
+          val advertApi = new ApiWrapper(mockConfig.baseUrl)
+          advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("user_blocked", "userId is blocked!")))
+        }
+    }
+
+    it("should be able to handle a new post ad with an invalid content") {
+
+      forgePact
+        .between("mobile-client")
+        .and("advert-service")
+        .addInteraction(
+          interaction
+            .description("Mobile client posts a new advert")
+            .given("the ad contains invalid content")
+            .uponReceiving(POST,
+              "/api/adverts",
+              None,
+              Map("client_id" -> "web_client"),
+              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc")))),
+              None)
+            .willRespondWith(HttpStatus.SC_BAD_REQUEST, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(ErrorResponse("rejected_ad_content", "Ad contains rejected content!")))
+        )
+        .runConsumerTest { mockConfig =>
+          val advertApi = new ApiWrapper(mockConfig.baseUrl)
+          advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("rejected_ad_content", "Ad contains rejected content!")))
+        }
+    }
+
+    it("should be able to handle a new post ad with internal server error") {
+
+      forgePact
+        .between("mobile-client")
+        .and("advert-service")
+        .addInteraction(
+          interaction
+            .description("Mobile client posts a new advert")
+            .given("the server is down")
+            .uponReceiving(POST,
+              "/api/adverts",
+              None,
+              Map("client_id" -> "web_client"),
+              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc")))),
+              None)
+            .willRespondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        )
+        .runConsumerTest { mockConfig =>
+          val advertApi = new ApiWrapper(mockConfig.baseUrl)
+          advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("internal-server-error", "")))
+        }
     }
   }
 }
