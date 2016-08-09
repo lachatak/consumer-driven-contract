@@ -1,6 +1,6 @@
 package org.kaloz.cdc.web
 
-import com.itv.scalapact.ScalaPactForger.{POST, forgePact, interaction}
+import com.itv.scalapact.ScalaPactForger.{GET, POST, forgePact, interaction}
 import org.apache.http.HttpStatus
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -108,6 +108,56 @@ class WebClientConsumerPactSpec extends FunSpec with Matchers {
         .runConsumerTest { mockConfig =>
           val advertApi = new ApiWrapper(mockConfig.baseUrl)
           advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("internal-server-error", "")))
+        }
+    }
+
+    it("should be able to get all the adverts") {
+
+      val response = AdvertListResponse(List(UserAdvertDetails("userId",
+        List(AdvertDetails("1", dateTime.toDate, "active", 1, "desc", 100), AdvertDetails("2", dateTime.plusDays(2).toDate, "active", 1, "desc", 100))
+      )))
+
+      forgePact
+        .between("advert-api-contract")
+        .and("advert-service")
+        .addInteraction(
+          interaction
+            .description("Advert API contract client queries all the ads")
+            .given("there are ads available in the service")
+            .uponReceiving(GET,
+              "/api/adverts",
+              None,
+              Map("client_id" -> "contract_client"),
+              None,
+              None)
+            .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(response))
+        )
+        .runConsumerTest { mockConfig =>
+          val advertApi = new ApiWrapper(mockConfig.baseUrl)
+          advertApi.adverts() should equal(\/-(response))
+        }
+    }
+
+    it("should be able to get all the adverts with internal server error") {
+
+      forgePact
+        .between("advert-api-contract")
+        .and("advert-service")
+        .addInteraction(
+          interaction
+            .description("Advert API contract client queries all the ads")
+            .given("the there is a server error")
+            .uponReceiving(GET,
+              "/api/adverts",
+              None,
+              Map("client_id" -> "contract_client"),
+              None,
+              None)
+            .willRespondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        )
+        .runConsumerTest { mockConfig =>
+          val advertApi = new ApiWrapper(mockConfig.baseUrl)
+          advertApi.adverts() should equal(-\/(ErrorResponse("internal-server-error", "")))
         }
     }
   }

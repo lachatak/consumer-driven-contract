@@ -30,7 +30,8 @@
             <groupId>org.kaloz.cdc.contracts</groupId>
             <artifactId>advert-api-contracts</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <type>pact</type>
+            <classifier>pacts</classifier>
+            <type>zip</type>
         </dependency>
 
         <dependency>
@@ -111,8 +112,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>${maven-dependency-plugin.version}</version>
-                <!-- Generate version.txt for contract to be able to expose contract version numbers -->
                 <executions>
+                    <!-- Generate version.txt for contract to be able to expose contract version numbers -->
                     <execution>
                         <id>list</id>
                         <phase>generate-sources</phase>
@@ -124,38 +125,25 @@
                             <outputFile>${project.build.directory}/contracts/versions.txt</outputFile>
                         </configuration>
                     </execution>
-                    <!-- Copy pact dependencies to the test directory -->
+                    <!-- Unpack contracts for testing -->
                     <execution>
-                        <id>copy</id>
+                        <id>unpack</id>
                         <phase>generate-test-resources</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <includeTypes>pact</includeTypes>
-                            <outputDirectory>${project.build.testOutputDirectory}/pacts-dependents</outputDirectory>
-                            <stripVersion>true</stripVersion>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.kaloz.cdc.contracts</groupId>
+                                    <artifactId>advert-api-contracts</artifactId>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                    <classifier>pacts</classifier>
+                                    <type>zip</type>
+                                    <outputDirectory>${project.build.testOutputDirectory}/pacts-dependents</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Rename pact to json otherwise won't be used in the verification -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <phase>generate-test-resources</phase>
-                        <configuration>
-                            <target>
-                                <move file="target/test-classes/pacts-dependents/advert-api-contracts.pact"
-                                      toFile="target/test-classes/pacts-dependents/advert-api-contracts.json"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
