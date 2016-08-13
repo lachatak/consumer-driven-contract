@@ -11,7 +11,7 @@ import scalaz.{-\/, \/-}
 
 class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
 
-  describe("Security API Contract Test") {
+  describe("Security API Contract Implementor") {
 
     it("should be able to verify advert with valid data") {
 
@@ -20,7 +20,7 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client posts a new advert to verify")
+            .description("be able to verify advert")
             .given("the advert is valid")
             .uponReceiving(POST,
               "/api/security/advert",
@@ -45,8 +45,8 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client posts a new advert to verify")
-            .given("the user is blocked")
+            .description("be able to verify advert")
+            .given("the user with id '1' is blocked")
             .uponReceiving(POST,
               "/api/security/advert",
               None,
@@ -61,7 +61,7 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to verify advert with invalid data") {
+    it("should be able to verify advert when the ad content is invalid") {
 
       val response: ErrorResponse = ErrorResponse("rejected_ad_description", "Ad contains invalid data")
 
@@ -70,8 +70,8 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client posts a new advert to verify")
-            .given("ad contains invalid data")
+            .description("be able to verify advert")
+            .given("the ad content is invalid")
             .uponReceiving(POST,
               "/api/security/advert",
               None,
@@ -93,8 +93,8 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client posts a new advert to verify")
-            .given("the there is a server error")
+            .description("be able to verify advert")
+            .given("there is a server error")
             .uponReceiving(POST,
               "/api/security/advert",
               None,
@@ -116,7 +116,7 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client gets the list of blocked users")
+            .description("be able to get list of blocked users")
             .given("there are blocked users")
             .uponReceiving(GET,
               "/api/security/users",
@@ -139,8 +139,8 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client gets list of blocked users")
-            .given("the there is a server error")
+            .description("be able to get list of blocked users")
+            .given("there is a server error")
             .uponReceiving(GET,
               "/api/security/users",
               None,
@@ -162,7 +162,7 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client blocks users")
+            .description("be able to block user")
             .uponReceiving(POST,
               "/api/security/users",
               None,
@@ -184,8 +184,8 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client blocks users")
-            .given("the there is a server error")
+            .description("be able to block users")
+            .given("there is a server error")
             .uponReceiving(POST,
               "/api/security/users/1",
               None,
@@ -207,8 +207,8 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client unblocks users")
-            .given("blocked user with exists with id '1'")
+            .description("be able to unblock user")
+            .given("blocked user exists with id '1'")
             .uponReceiving(DELETE,
               "/api/security/users/1",
               None,
@@ -230,8 +230,8 @@ class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Security API contract client unblocks users")
-            .given("the there is a server error")
+            .description("be able to unblock user")
+            .given("there is a server error")
             .uponReceiving(DELETE,
               "/api/security/users/1",
               None,

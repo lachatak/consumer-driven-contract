@@ -11,16 +11,16 @@ import scalaz.{-\/, \/-}
 
 class SecurityServiceConsumerPactSpec extends FunSpec with Matchers {
 
-  describe("Security Service Consumer Test") {
+  describe("Advert Service") {
 
-    it("should be able to verify advert with valid data") {
+    it("should be able to post valid advert for verification") {
 
       forgePact
         .between("advert-service")
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Adverts service posts a new advert to verify")
+            .description("be able to verify advert")
             .given("the advert is valid")
             .uponReceiving(POST,
               "/api/security/advert",
@@ -36,17 +36,17 @@ class SecurityServiceConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to verify advert with blocked user") {
+    it("should be able to post advert with blocked user for verification") {
 
-      val response: ErrorResponse = ErrorResponse("user_blocked", "Used is blocked")
+      val response: ErrorResponse = ErrorResponse("user_blocked", "1 is blocked!")
 
       forgePact
         .between("advert-service")
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Adverts service client posts a new advert to verify")
-            .given("the user is blocked")
+            .description("be able to verify advert")
+            .given("the user with id '1' is blocked")
             .uponReceiving(POST,
               "/api/security/advert",
               None,
@@ -61,7 +61,7 @@ class SecurityServiceConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to verify advert with invalid data") {
+    it("should be able to post advert with invalid content for verification") {
 
       val response: ErrorResponse = ErrorResponse("rejected_ad_description", "Ad contains invalid data")
 
@@ -70,7 +70,7 @@ class SecurityServiceConsumerPactSpec extends FunSpec with Matchers {
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Adverts service posts a new advert to verify")
+            .description("be able to verify advert")
             .given("ad contains invalid data")
             .uponReceiving(POST,
               "/api/security/advert",
@@ -86,15 +86,15 @@ class SecurityServiceConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to verify advert with internal server error") {
+    it("should be able to post advert for verification when there is internal server error") {
 
       forgePact
         .between("advert-service")
         .and("security-service")
         .addInteraction(
           interaction
-            .description("Adverts service posts a new advert to verify")
-            .given("the there is a server error")
+            .description("be able to verify advert")
+            .given("there is a server error")
             .uponReceiving(POST,
               "/api/security/advert",
               None,

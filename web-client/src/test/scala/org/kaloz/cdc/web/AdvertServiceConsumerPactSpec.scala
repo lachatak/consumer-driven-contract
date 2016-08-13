@@ -15,7 +15,7 @@ class AdvertServiceConsumerPactSpec extends FunSpec with Matchers {
 
   val dateTime = DateTime.parse("17-07-16 14.53.12", DateTimeFormat.forPattern("dd-MM-yy HH.mm.ss"))
 
-  describe("Advert Service Consumer") {
+  describe("Web Client") {
 
     it("should be able to post a new valid advert") {
 
@@ -26,7 +26,7 @@ class AdvertServiceConsumerPactSpec extends FunSpec with Matchers {
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Web client posts a new advert")
+            .description("be able to process a new advert post")
             .given("the advert is valid")
             .uponReceiving(POST,
               "/api/adverts",
@@ -42,37 +42,37 @@ class AdvertServiceConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to handle a new post ad with a blocked user") {
+    it("should be able to post a new advert when the user is blocked") {
 
       forgePact
         .between("web-client")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Web client posts a new advert")
-            .given("the user_id is blocked")
+            .description("be able to process a new advert post")
+            .given("the user with id '1' is blocked")
             .uponReceiving(POST,
               "/api/adverts",
               None,
               Map("client_id" -> "web_client"),
-              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc")))),
+              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("1", PostAdvertRequestAd(1, 100, "desc")))),
               None)
-            .willRespondWith(HttpStatus.SC_BAD_REQUEST, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(ErrorResponse("user_blocked", "userId is blocked!")))
+            .willRespondWith(HttpStatus.SC_BAD_REQUEST, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(ErrorResponse("user_blocked", "1 is blocked!")))
         )
         .runConsumerTest { mockConfig =>
           val advertApi = new ApiWrapper(mockConfig.baseUrl)
-          advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("user_blocked", "userId is blocked!")))
+          advertApi.postAdvert(PostAdvertRequest("1", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("user_blocked", "1 is blocked!")))
         }
     }
 
-    it("should be able to handle a new post ad with an invalid content") {
+    it("should be able to post a new advert when the content is invalid") {
 
       forgePact
         .between("web-client")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Web client posts a new advert")
+            .description("be able to process a new advert post")
             .given("the ad contains invalid content")
             .uponReceiving(POST,
               "/api/adverts",
@@ -88,15 +88,15 @@ class AdvertServiceConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to handle a new post ad with internal server error") {
+    it("should be able to post a new advert when there is an internal server error") {
 
       forgePact
         .between("web-client")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Web client posts a new advert")
-            .given("the server is down")
+            .description("be able to process a new advert post")
+            .given("there is a server error")
             .uponReceiving(POST,
               "/api/adverts",
               None,
@@ -122,7 +122,7 @@ class AdvertServiceConsumerPactSpec extends FunSpec with Matchers {
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Web client queries all the ads")
+            .description("be able to process get all adverts request")
             .given("there are ads available in the service")
             .uponReceiving(GET,
               "/api/adverts",
@@ -138,15 +138,15 @@ class AdvertServiceConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to get all the adverts with internal server error") {
+    it("should be able to get all the adverts when there is an internal server error") {
 
       forgePact
         .between("web-client")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Web client queries all the ads")
-            .given("the there is a server error")
+            .description("be able to process get all adverts request")
+            .given("there is a server error")
             .uponReceiving(GET,
               "/api/adverts",
               None,

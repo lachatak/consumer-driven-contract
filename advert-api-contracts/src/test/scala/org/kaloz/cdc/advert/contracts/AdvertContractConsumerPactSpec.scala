@@ -16,9 +16,9 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
 
   val dateTime = DateTime.parse("17-07-16 14.53.12", DateTimeFormat.forPattern("dd-MM-yy HH.mm.ss"))
 
-  describe("Advert API Contract Test") {
+  describe("Advert API Contract Implementor") {
 
-    it("should be able to post a new valid advert") {
+    it("should be able to process a new valid advert post") {
 
       val response: PostAdvertResponse = PostAdvertResponse("1", dateTime.toDate)
 
@@ -27,53 +27,53 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client posts a new advert")
+            .description("be able to process a new advert post")
             .given("the advert is valid")
             .uponReceiving(POST,
               "/api/adverts",
               None,
               Map("client_id" -> "contract_client"),
-              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc")))),
+              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("1", PostAdvertRequestAd(1, 100, "desc")))),
               None)
             .willRespondWith(HttpStatus.SC_OK, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(response))
         )
         .runConsumerTest { mockConfig =>
           val advertApi = new ApiWrapper(mockConfig.baseUrl)
-          advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(\/-(response))
+          advertApi.postAdvert(PostAdvertRequest("1", PostAdvertRequestAd(1, 100, "desc"))) should equal(\/-(response))
         }
     }
 
-    it("should be able to handle a new post ad with a blocked user") {
+    it("should be able to process a new advert post when the user is blocked") {
 
       forgePact
         .between("advert-api-contract")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client posts a new advert")
-            .given("the user_id is blocked")
+            .description("be able to process a new advert post")
+            .given("the user with id '1' is blocked")
             .uponReceiving(POST,
               "/api/adverts",
               None,
               Map("client_id" -> "contract_client"),
-              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc")))),
+              Some(getJsonMapper.writeValueAsString(PostAdvertRequest("1", PostAdvertRequestAd(1, 100, "desc")))),
               None)
-            .willRespondWith(HttpStatus.SC_BAD_REQUEST, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(ErrorResponse("user_blocked", "userId is blocked!")))
+            .willRespondWith(HttpStatus.SC_BAD_REQUEST, Map("Content-Type" -> "application/json"), getJsonMapper.writeValueAsString(ErrorResponse("user_blocked", "1 is blocked!")))
         )
         .runConsumerTest { mockConfig =>
           val advertApi = new ApiWrapper(mockConfig.baseUrl)
-          advertApi.postAdvert(PostAdvertRequest("userId", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("user_blocked", "userId is blocked!")))
+          advertApi.postAdvert(PostAdvertRequest("1", PostAdvertRequestAd(1, 100, "desc"))) should equal(-\/(ErrorResponse("user_blocked", "1 is blocked!")))
         }
     }
 
-    it("should be able to handle a new post ad with an invalid content") {
+    it("should be able to process a new advert post when the content is invalid") {
 
       forgePact
         .between("advert-api-contract")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client posts a new advert")
+            .description("be able to process a new advert post")
             .given("the ad contains invalid content")
             .uponReceiving(POST,
               "/api/adverts",
@@ -89,15 +89,15 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to handle a new post ad with internal server error") {
+    it("should be able to process a new advert post when there is an internal server error") {
 
       forgePact
         .between("advert-api-contract")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client posts a new advert")
-            .given("the there is a server error")
+            .description("be able to process a new advert post")
+            .given("there is a server error")
             .uponReceiving(POST,
               "/api/adverts",
               None,
@@ -112,7 +112,7 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to get all the adverts") {
+    it("should be able to process get all adverts request") {
 
       val response = AdvertListResponse(List(UserAdvertDetails("userId",
         List(AdvertDetails("1", dateTime.toDate, "active", 1, "desc", 100), AdvertDetails("2", dateTime.plusDays(2).toDate, "active", 1, "desc", 100))
@@ -123,7 +123,7 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client queries all the ads")
+            .description("be able to process get all adverts request")
             .given("there are ads available in the service")
             .uponReceiving(GET,
               "/api/adverts",
@@ -139,15 +139,15 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to get all the adverts with internal server error") {
+    it("should be able to process get all adverts request when there is an internal server error") {
 
       forgePact
         .between("advert-api-contract")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client queries all the ads")
-            .given("the there is a server error")
+            .description("be able to process get all adverts request")
+            .given("there is a server error")
             .uponReceiving(GET,
               "/api/adverts",
               None,
@@ -162,7 +162,7 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to query a specific advert by id") {
+    it("should be able to process get advert by id") {
 
       val response = AdvertDetailsResponse("userId", "1", dateTime.toDate, "active", 1, "desc", 100)
 
@@ -171,7 +171,7 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client query a specific advert by id")
+            .description("be able to process get advert by id")
             .given("there is an ad with id '1'")
             .uponReceiving(GET,
               "/api/adverts/1",
@@ -187,14 +187,14 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to query a specific advert by id when it is not available") {
+    it("should be able to process get advert by id when the advert is not available") {
 
       forgePact
         .between("advert-api-contract")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client query a specific advert by id")
+            .description("be able to process get advert by id")
             .given("there is no ad with id '1'")
             .uponReceiving(GET,
               "/api/adverts/1",
@@ -210,15 +210,15 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
         }
     }
 
-    it("should be able to query a specific advert by id with internal server error") {
+    it("should be able to process get advert by id when there is an internal server error") {
 
       forgePact
         .between("advert-api-contract")
         .and("advert-service")
         .addInteraction(
           interaction
-            .description("Advert API contract client query a specific advert by id")
-            .given("the there is a server error")
+            .description("be able to process get advert by id")
+            .given("there is a server error")
             .uponReceiving(GET,
               "/api/adverts/1",
               None,
