@@ -1,10 +1,10 @@
-package org.kaloz.cdc.security
+package org.kaloz.cdc.advert.service
 
 import java.net.URL
 
-import org.http4s.MediaType.`text/plain`
+import org.http4s.MediaType._
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.dsl.{:?, QueryParamDecoderMatcher, _}
 import org.http4s.headers.`Content-Type`
 import org.http4s.server.Server
 import org.http4s.server.blaze.BlazeBuilder

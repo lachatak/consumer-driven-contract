@@ -13,10 +13,11 @@
 
     <properties>
         <http4s-dsl.version>0.13.2a</http4s-dsl.version>
+        <httpclient.version>4.5.1</httpclient.version>
 
-        <process-exec-maven-plugin.version>0.7</process-exec-maven-plugin.version>
         <pact-jvm-provider-maven.version>3.1.1</pact-jvm-provider-maven.version>
         <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
+        <swagger-codegen-maven-plugin.version>2.1.6</swagger-codegen-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -41,6 +42,11 @@
             <type>contract</type>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.http4s</groupId>
             <artifactId>http4s-dsl_2.11</artifactId>
@@ -69,6 +75,11 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+
         <!-- Scala -->
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -79,6 +90,12 @@
         <dependency>
             <groupId>com.itv</groupId>
             <artifactId>scalapact-scalatest_2.11</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-provider-scalatest_2.11</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -125,6 +142,19 @@
                             <outputFile>${project.build.directory}/contracts/versions.txt</outputFile>
                         </configuration>
                     </execution>
+                    <!-- Copy contract for client generation -->
+                    <execution>
+                        <id>copy</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeTypes>contract</includeTypes>
+                            <outputDirectory>${project.build.directory}/contracts</outputDirectory>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
                     <!-- Unpack contracts for testing -->
                     <execution>
                         <id>unpack</id>
@@ -143,6 +173,28 @@
                                     <outputDirectory>${project.build.testOutputDirectory}/pacts-dependents</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Generate client -->
+            <plugin>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger-codegen-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.build.directory}/contracts/security-api-contracts.contract</inputSpec>
+                            <language>scala</language>
+                            <output>${project.build.directory}/generated-sources</output>
+                            <apiPackage>org.kaloz.cdc.security.handler</apiPackage>
+                            <modelPackage>org.kaloz.cdc.security.model</modelPackage>
+                            <invokerPackage>org.kaloz.cdc.security.invoker</invokerPackage>
                         </configuration>
                     </execution>
                 </executions>
@@ -172,95 +224,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Package provider to be able to run and check pacts -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.kaloz.cdc.contracts:*</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>org.kaloz.cdc.advert.Main</Main-Class>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Start provider to be able to test pacts -->
-            <plugin>
-                <groupId>com.bazaarvoice.maven.plugins</groupId>
-                <artifactId>process-exec-maven-plugin</artifactId>
-                <version>${process-exec-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>advert-service</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                        <configuration>
-                            <name>advert-service</name>
-                            <waitForInterrupt>false</waitForInterrupt>
-                            <healthcheckUrl>http://localhost:8080/healthcheck</healthcheckUrl>
-                            <arguments>
-                                <argument>java</argument>
-                                <argument>-jar</argument>
-                                <argument>${basedir}/target/advert-service-1.0.0-SNAPSHOT.jar</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <!--Stop all processes in reverse order-->
-                    <execution>
-                        <id>stop-all</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop-all</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Verify extracted and downloaded pacts agains a runnig provider -->
-            <plugin>
-                <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-provider-maven_2.11</artifactId>
-                <version>${pact-jvm-provider-maven.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                        <phase>integration-test</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <serviceProviders>
-                        <serviceProvider>
-                            <name>advert-service</name>
-                            <protocol>http</protocol>
-                            <host>localhost</host>
-                            <port>8080</port>
-                            <path>/</path>
-                            <pactFileDirectory>${project.build.testOutputDirectory}/pacts-dependents</pactFileDirectory>
-                        </serviceProvider>
-                    </serviceProviders>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -16,7 +16,7 @@ class AdvertContractConsumerPactSpec extends FunSpec with Matchers {
 
   val dateTime = DateTime.parse("17-07-16 14.53.12", DateTimeFormat.forPattern("dd-MM-yy HH.mm.ss"))
 
-  describe("Advert Contract Consumer Test") {
+  describe("Advert API Contract Test") {
 
     it("should be able to post a new valid advert") {
 

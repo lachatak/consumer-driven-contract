@@ -1,13 +1,12 @@
-package org.kaloz.cdc.security
+package org.kaloz.cdc.advert.service
 
 import java.net.URL
 
 import au.com.dius.pact.provider.scalatest.{PactProviderStatefulDslSpec, ServerStarter}
-import org.kaloz.cdc.security.service.ServerImpl
 import org.scalatest.Ignore
 
 @Ignore
-class SecurityProviderStatefulPactSpec extends PactProviderStatefulDslSpec("security-service") {
+class AdvertServiceProviderStatefulPactSpec extends PactProviderStatefulDslSpec("advert-service") {
 
   lazy val serverStarter: ServerStarter = new ServerStarter {
 

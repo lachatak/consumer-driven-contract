@@ -11,7 +11,7 @@ import scalaz.{-\/, \/-}
 
 class SecurityContractConsumerPactSpec extends FunSpec with Matchers {
 
-  describe("Security Contract Consumer Test") {
+  describe("Security API Contract Test") {
 
     it("should be able to verify advert with valid data") {
 
