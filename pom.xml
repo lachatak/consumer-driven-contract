@@ -11,12 +11,12 @@
 
     <!-- Modules -->
     <modules>
-        <module>pact-scalatest-provider</module>
-        <module>contracts</module>
-        <module>consumer1</module>
-        <module>consumer2</module>
-        <module>greeting</module>
-        <module>time</module>
+        <module>advert-api-contracts</module>
+        <module>security-api-contracts</module>
+        <module>mobile-client</module>
+        <module>web-client</module>
+        <module>advert-service</module>
+        <module>security-service</module>
     </modules>
 
     <!-- Properties -->
@@ -28,25 +28,34 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <scalaz-core.version>7.2.2</scalaz-core.version>
-        <slf4j.version>1.7.15</slf4j.version>
-        <logback.version>1.1.6</logback.version>
-        <scalatest.version>2.2.6</scalatest.version>
+        <async-http-client.version>1.9.11</async-http-client.version>
+        <commons-codec.version>1.6</commons-codec.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-lang3.version>3.3.2</commons-lang3.version>
+        <commons-logging.version>1.1.3</commons-logging.version>
+        <guava.version>18.0</guava.version>
+        <httpclient.version>4.5.1</httpclient.version>
         <jackson-module-scala.version>2.7.3</jackson-module-scala.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <jetty.version>6.1.26</jetty.version>
+        <json.version>20160212</json.version>
+        <logback.version>1.1.6</logback.version>
         <mockito-all.version>1.10.19</mockito-all.version>
+        <pact-jvm-provider.version>3.2.11</pact-jvm-provider.version>
         <scala-logging.version>3.4.0</scala-logging.version>
         <scala-parser-combinators.version>1.0.4</scala-parser-combinators.version>
         <scala-xml.version>1.0.5</scala-xml.version>
-        <jetty.version>6.1.26</jetty.version>
-        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
         <scalaj-http.version>2.3.0</scalaj-http.version>
         <scalapact-scalatest.version>1.0.0</scalapact-scalatest.version>
-        <pact-jvm-provider.version>3.2.8</pact-jvm-provider.version>
+        <scalatest.version>2.2.6</scalatest.version>
+        <scalaz-core.version>7.2.2</scalaz-core.version>
+        <slf4j.version>1.7.15</slf4j.version>
+        <netty.version>3.10.0.Final</netty.version>
 
         <sbt-compiler.plugin.version>1.0.0-beta8</sbt-compiler.plugin.version>
         <scalatest-maven-plugin.version>1.0</scalatest-maven-plugin.version>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
-        <pactbroker-maven-plugin.version>0.0.8</pactbroker-maven-plugin.version>
+        <pactbroker-maven-plugin.version>0.0.9</pactbroker-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -61,7 +70,27 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${javax.servlet-api.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ning</groupId>
+                <artifactId>async-http-client</artifactId>
+                <version>${async-http-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
 
             <!-- Logging -->
             <dependency>
@@ -116,8 +145,9 @@
             </dependency>
             <dependency>
                 <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-provider_2.11</artifactId>
+                <artifactId>pact-jvm-provider-scalatest_2.11</artifactId>
                 <version>${pact-jvm-provider.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
@@ -164,6 +194,34 @@
                 <artifactId>scalaz-core_2.11</artifactId>
                 <version>${scalaz-core.version}</version>
             </dependency>
+
+            <!-- Others -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons-logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons-lang.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -249,4 +307,10 @@
         </pluginManagement>
     </build>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
